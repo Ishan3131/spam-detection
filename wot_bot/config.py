@@ -12,7 +12,7 @@ DEPTH_WEIGHTS: Dict[int, float] = {
     0: 1.0,  # Local repository vouches / denouncements
     1: 1.0,  # Direct peer repositories
     2: 0.5,  # 2nd-degree transitive peers
-    3: 0.25, # 3rd-degree transitive peers
+    3: 0.25,  # 3rd-degree transitive peers
 }
 
 # Maximum depth limit for BFS graph traversal to prevent infinite cycles and rate limits
