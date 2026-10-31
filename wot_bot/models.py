@@ -17,7 +17,7 @@ class TrustRegistry:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "TrustRegistry":
         """Instantiate TrustRegistry from raw parsed JSON dictionary.
-        
+
         Usernames are normalized to lowercase for case-insensitive matching.
         """
         raw_vouches = data.get("vouches", [])
