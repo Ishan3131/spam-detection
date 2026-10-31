@@ -1,0 +1,17 @@
+{
+  "contributor": "bot-farm-01",
+  "score": -1.5,
+  "status": "suspicious",
+  "action_taken": "Apply label 'suspicious' and post warning comment",
+  "action_summary": {
+    "contributor": "bot-farm-01",
+    "score": -1.5,
+    "status": "suspicious",
+    "labels_added": [
+      "suspicious"
+    ],
+    "comment_posted": true,
+    "dry_run": true
+  },
+  "explanation": "### 🛡️ Decentralized Web-of-Trust (WoT) Reputation Report\n- **Contributor**: `@bot-farm-01`\n- **Net Trust Score**: `-1.50`\n- **Classification**: ⚠️ **SUSPICIOUS CONTRIBUTOR FLAGGED**\n\n#### Scoring Breakdown & Graph Trail\n| Depth | Peer Project | Event | Weight | Net Impact |\n|:-----:|:-------------|:-----:|:------:|:----------:|\n| 0 | `vyrox/spam-detection` | 🚨 Denounce | 1.00x | -1.00 |\n| 2 | `acme/trust-network` | 🚨 Denounce | 0.50x | -0.50 |\n\n#### Threshold Parameters\n- Trusted threshold: `score > 1.0`\n- Suspicious threshold: `score < -1.0`\n\n> ⚠️ **Maintainer Notice**: This pull request author has accumulated negative reputation from decentralized peer project denouncements. Please audit this PR carefully before executing workflow runs or merging."
+}
