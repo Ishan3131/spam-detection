@@ -1,0 +1,20 @@
+{
+  "action": "opened",
+  "number": 42,
+  "pull_request": {
+    "number": 42,
+    "state": "open",
+    "title": "feat: add optimized graph search",
+    "user": {
+      "login": "alice-dev",
+      "id": 1024
+    }
+  },
+  "repository": {
+    "name": "spam-detection",
+    "full_name": "Ishan3131/spam-detection",
+    "owner": {
+      "login": "Ishan3131"
+    }
+  }
+}

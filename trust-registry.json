@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "project": "vyrox/spam-detection",
+  "description": "Decentralized Web-of-Trust (WoT) registry for PR contributor reputation",
+  "vouches": [
+    "alice-dev",
+    "himanshi-core",
+    "jyoti-lead",
+    "ishan-admin"
+  ],
+  "denouncements": [
+    "malicious-spammer",
+    "bot-farm-01",
+    "phishing-actor-x"
+  ],
+  "trusted_peers": [
+    "vyrox/reputation-seed",
+    "acme/trust-network",
+    "oss-watchdog/verified-peers"
+  ]
+}
