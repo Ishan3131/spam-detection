@@ -15,14 +15,17 @@ from wot_bot.config import (
     HTTP_TIMEOUT_SECONDS,
     MAX_TRAVERSAL_DEPTH,
     RAW_URL_TEMPLATE,
+    REGISTRY_FILENAMES,
 )
 from wot_bot.models import TrustRegistry
 
 logger = logging.getLogger(__name__)
 
 
-def build_raw_registry_url(repo_identifier: str, branch: str = DEFAULT_BRANCH) -> str:
-    """Format the GitHub raw content URL for a repository's trust-registry.json.
+def build_raw_registry_url(
+    repo_identifier: str, branch: str = DEFAULT_BRANCH, filename: str = "trust_signed.json"
+) -> str:
+    """Format the GitHub raw content URL for a repository's trust registry.
 
     Supports 'owner/repo' or 'owner/repo@branch' syntax.
     """
@@ -39,7 +42,7 @@ def build_raw_registry_url(repo_identifier: str, branch: str = DEFAULT_BRANCH) -
         )
 
     owner, repo = parts[0].strip(), parts[1].strip()
-    return RAW_URL_TEMPLATE.format(owner=owner, repo=repo, branch=branch)
+    return RAW_URL_TEMPLATE.format(owner=owner, repo=repo, branch=branch, filename=filename)
 
 
 def fetch_remote_registry(
@@ -52,52 +55,49 @@ def fetch_remote_registry(
     Uses `requests` when available; falls back to `urllib.request` for
     dependency-free execution. Unreachable or missing files fail gracefully.
     """
-    try:
-        url = build_raw_registry_url(peer_repo, branch)
-    except ValueError as err:
-        logger.warning("Skipping invalid peer format: %s (%s)", peer_repo, err)
-        return None
-
-    logger.debug("Fetching trust registry from %s", url)
-
-    # Attempt requests library first
-    try:
-        import requests
-
-        response = requests.get(
-            url,
-            timeout=timeout,
-            headers={"User-Agent": "WoT-Reputation-Bot/1.0"},
-        )
-        if response.status_code == 200:
-            data = response.json()
-            return TrustRegistry.from_dict(data)
-        logger.warning(
-            "Peer %s returned HTTP status %s; skipping.", peer_repo, response.status_code
-        )
-        return None
-    except ImportError:
-        pass  # Fallback to urllib
-    except Exception as exc:
-        logger.warning("Failed to fetch %s via requests: %s", peer_repo, exc)
-        return None
-
-    # Fallback to standard library urllib
-    try:
-        import urllib.request
-
-        req = urllib.request.Request(
-            url, headers={"User-Agent": "WoT-Reputation-Bot/1.0"}
-        )
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            if resp.status == 200:
-                raw_bytes = resp.read()
-                data = json.loads(raw_bytes.decode("utf-8"))
-                return TrustRegistry.from_dict(data)
+    for filename in REGISTRY_FILENAMES:
+        try:
+            url = build_raw_registry_url(peer_repo, branch, filename=filename)
+        except ValueError as err:
+            logger.warning("Skipping invalid peer format: %s (%s)", peer_repo, err)
             return None
-    except Exception as exc:
-        logger.warning("Failed to fetch %s via urllib fallback: %s", peer_repo, exc)
-        return None
+
+        logger.debug("Fetching trust registry from %s", url)
+
+        # Attempt requests library first
+        try:
+            import requests
+
+            response = requests.get(
+                url,
+                timeout=timeout,
+                headers={"User-Agent": "WoT-Reputation-Bot/1.0"},
+            )
+            if response.status_code == 200:
+                data = response.json()
+                return TrustRegistry.from_dict(data)
+        except ImportError:
+            pass
+        except Exception as exc:
+            logger.warning("Failed to fetch %s via requests: %s", peer_repo, exc)
+
+        # Fallback to standard library urllib
+        try:
+            import urllib.request
+
+            req = urllib.request.Request(
+                url, headers={"User-Agent": "WoT-Reputation-Bot/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                if resp.status == 200:
+                    raw_bytes = resp.read()
+                    data = json.loads(raw_bytes.decode("utf-8"))
+                    return TrustRegistry.from_dict(data)
+        except Exception:
+            pass
+
+    logger.warning("Peer %s has neither trust_signed.json nor trust-registry.json; skipping.", peer_repo)
+    return None
 
 
 def traverse_trust_network(

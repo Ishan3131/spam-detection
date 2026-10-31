@@ -12,10 +12,10 @@ class TestTraversal(unittest.TestCase):
         url = build_raw_registry_url("acme/app")
         self.assertEqual(
             url,
-            "https://raw.githubusercontent.com/acme/app/main/trust-registry.json",
+            "https://raw.githubusercontent.com/acme/app/main/trust_signed.json",
         )
 
-        url_custom = build_raw_registry_url("acme/app@devel")
+        url_custom = build_raw_registry_url("acme/app@devel", filename="trust-registry.json")
         self.assertEqual(
             url_custom,
             "https://raw.githubusercontent.com/acme/app/devel/trust-registry.json",

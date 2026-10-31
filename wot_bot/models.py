@@ -6,12 +6,15 @@ from typing import Any, Dict, List, Set
 
 @dataclass
 class TrustRegistry:
-    """Represents a parsed trust-registry.json file from a repository."""
+    """Represents a parsed trust registry file (trust_signed.json or trust-registry.json)."""
     vouches: Set[str] = field(default_factory=set)
     denouncements: Set[str] = field(default_factory=set)
     trusted_peers: List[str] = field(default_factory=list)
     project: str = ""
     version: str = "1.0.0"
+    signer: str = ""
+    signature: str = ""
+    created_at: str = ""
     raw_data: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
@@ -53,6 +56,9 @@ class TrustRegistry:
             trusted_peers=peers,
             project=data.get("project", ""),
             version=data.get("version", "1.0.0"),
+            signer=data.get("signer", ""),
+            signature=data.get("signature", ""),
+            created_at=data.get("created_at", ""),
             raw_data=data,
         )
 

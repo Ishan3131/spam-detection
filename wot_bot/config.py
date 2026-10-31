@@ -32,8 +32,11 @@ LABEL_SUSPICIOUS: str = "suspicious"
 # Default branch used when fetching remote trust-registry.json
 DEFAULT_BRANCH: str = "main"
 
+# Supported registry filenames (checked in priority order)
+REGISTRY_FILENAMES = ["trust_signed.json", "trust-registry.json"]
+
 # GitHub Raw content URL pattern
-RAW_URL_TEMPLATE: str = "https://raw.githubusercontent.com/{owner}/{repo}/{branch}/trust-registry.json"
+RAW_URL_TEMPLATE: str = "https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{filename}"
 
 # HTTP timeout in seconds for peer registry network requests
 HTTP_TIMEOUT_SECONDS: float = 5.0
