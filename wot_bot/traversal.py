@@ -5,9 +5,9 @@ Web-of-Trust graph up to a maximum depth limit while preventing infinite
 loops and cyclic peer relationships.
 """
 
-from collections import deque
 import json
 import logging
+from collections import deque
 from typing import Callable, Deque, List, Optional, Set, Tuple
 
 from wot_bot.config import (
